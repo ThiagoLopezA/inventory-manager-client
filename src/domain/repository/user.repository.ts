@@ -1,8 +1,8 @@
-import { ApiResponse, Email, User } from "../models";
+import { ServiceResponse, Email, User } from "../models";
 
 export interface UsersStorageService {
   addUser(user: User): Promise<boolean>;
-  removeUser(user: User): Promise<boolean>;
+  removeUser(id: number): Promise<boolean>;
   updateUser(user: User): Promise<boolean>;
   getUsers(): Promise<User[]>;
   setUsers(users: User[]): void;
@@ -19,9 +19,9 @@ export interface AuthenticationService {
 }
 
 export interface UsersService {
-  create(user: User): Promise<ApiResponse>;
-  delete(user: User): Promise<ApiResponse>;
-  update(user: User): Promise<ApiResponse>;
-  findAll(): Promise<ApiResponse>;
-  findOne(id: string): Promise<ApiResponse>;
+  create(user: User): Promise<ServiceResponse>;
+  delete(id: number): Promise<ServiceResponse>;
+  update(user: User): Promise<ServiceResponse>;
+  findAll(): Promise<ServiceResponse>;
+  findOne(id: number): Promise<ServiceResponse>;
 }
