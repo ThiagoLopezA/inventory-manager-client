@@ -1,18 +1,18 @@
 import {
   NotificationService,
-  UsersService,
-  UsersStorageService,
+  SuppliersService,
+  SuppliersStorageService,
 } from "../../repository";
 
-let service: UsersService;
+let service: SuppliersService;
 let notification: NotificationService;
-let storage: UsersStorageService;
+let storage: SuppliersStorageService;
 
-export function useDestroyUser() {
+export function useDestroySupplier() {
   async function destroy(id: number) {
     const { code } = await service.delete(id);
     if (code !== 200) return notification.error("Error");
-    await storage.removeUser(id);
+    await storage.removeSupplier(id);
     return notification.success("Exito");
   }
   return { destroy };

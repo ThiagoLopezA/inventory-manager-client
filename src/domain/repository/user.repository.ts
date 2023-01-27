@@ -1,9 +1,9 @@
 import { ServiceResponse, Email, User } from "../models";
 
 export interface UsersStorageService {
-  addUser(user: User): Promise<boolean>;
-  removeUser(id: number): Promise<boolean>;
-  updateUser(user: User): Promise<boolean>;
+  addUser(user: User): Promise<void>;
+  removeUser(id: number): Promise<void>;
+  updateUser(user: User): Promise<void>;
   getUsers(): Promise<User[]>;
   setUsers(users: User[]): void;
 }
