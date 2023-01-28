@@ -10,10 +10,14 @@ let storage: UsersStorageService;
 
 export function useDestroyUser() {
   async function destroy(id: number) {
-    const { code } = await service.delete(id);
-    if (code !== 200) return notification.error("Error");
-    await storage.removeUser(id);
-    return notification.success("Exito");
+    const { error, message } = await service.delete(id);
+    if (error) {
+      notification.error(message);
+    } else {
+      await storage.removeUser(id);
+      notification.success(message);
+    }
   }
+
   return { destroy };
 }

@@ -10,10 +10,13 @@ let storage: UsersStorageService;
 
 export function useGetUsers() {
   async function getAll() {
-    const { code, response } = await service.findAll();
-    if (code !== 200) notification.error("Error");
-    notification.success("Exito");
-    storage.setUsers(response.data);
+    const { error, message, data } = await service.findAll();
+    if (error) {
+      notification.error(message);
+    } else {
+      notification.success(message);
+      storage.setUsers(data);
+    }
   }
 
   return { getAll };

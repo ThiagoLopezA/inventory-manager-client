@@ -1,9 +1,9 @@
-import { NotificationService, UsersService } from "../../repository";
+import { NotificationService, RequestsService } from "../../repository";
 
-let service: UsersService;
+let service: RequestsService;
 let notification: NotificationService;
 
-export function useGetUser() {
+export function useGetSupplier() {
   async function getOne(id: number) {
     const { error, message, data } = await service.findOne(id);
     if (error) {

@@ -10,6 +10,8 @@ export interface AuthResponse {
 }
 
 export interface ServiceResponse {
+  message: string;
   code: number;
-  response: any;
+  error: boolean;
+  data?: any;
 }

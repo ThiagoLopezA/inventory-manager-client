@@ -10,10 +10,14 @@ let storage: SuppliersStorageService;
 
 export function useGetSuppliers() {
   async function getAll() {
-    const { code, response } = await service.findAll();
-    if (code !== 200) notification.error("Error");
-    notification.success("Exito");
-    storage.setSuppliers(response.data);
+    const { error, data, message } = await service.findAll();
+    if (error) {
+      notification.error(message);
+    } else {
+      notification.success(message);
+      await storage.setSuppliers(data);
+    }
   }
+
   return { getAll };
 }

@@ -11,10 +11,13 @@ let storage: SuppliersStorageService;
 
 export function useCreateSupplier() {
   async function create(supplier: Supplier) {
-    const { code } = await service.create(supplier);
-    if (code !== 201) return notification.error("Error");
-    await storage.addSupplier(supplier);
-    return notification.success("Exito");
+    const { error, message } = await service.create(supplier);
+    if (error) {
+      notification.error(message);
+    } else {
+      await storage.addSupplier(supplier);
+      notification.success(message);
+    }
   }
 
   return { create };

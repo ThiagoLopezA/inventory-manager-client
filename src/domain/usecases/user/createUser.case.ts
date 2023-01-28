@@ -11,10 +11,13 @@ let storage: UsersStorageService;
 
 export function useCreateUser() {
   async function create(user: User) {
-    const { code } = await service.create(user);
-    if (code !== 201) return notification.error("Error");
-    await storage.addUser(user);
-    return notification.success("Creado con exito");
+    const { error, message } = await service.create(user);
+    if (error) {
+      notification.error(message);
+    } else {
+      await storage.addUser(user);
+      notification.success(message);
+    }
   }
 
   return { create };

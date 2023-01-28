@@ -1,20 +1,20 @@
 import {
   NotificationService,
-  SuppliersService,
-  SuppliersStorageService,
+  RequestsService,
+  RequestsStorageService,
 } from "../../repository";
 
-let service: SuppliersService;
+let service: RequestsService;
 let notification: NotificationService;
-let storage: SuppliersStorageService;
+let storage: RequestsStorageService;
 
-export function useDestroySupplier() {
+export function useDestroyRequest() {
   async function destroy(id: number) {
     const { error, message } = await service.delete(id);
     if (error) {
       notification.error(message);
     } else {
-      await storage.removeSupplier(id);
+      await storage.removeRequest(id);
       notification.success(message);
     }
   }

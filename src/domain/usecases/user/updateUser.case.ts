@@ -11,10 +11,13 @@ let storage: UsersStorageService;
 
 export function useUpdateUser() {
   async function update(user: User) {
-    const { code } = await service.update(user);
-    if (code !== 200) return notification.error("Error");
-    await storage.updateUser(user);
-    return notification.success("Exito");
+    const { error, message } = await service.update(user);
+    if (error) {
+      notification.error(message);
+    } else {
+      await storage.updateUser(user);
+      notification.success(message);
+    }
   }
 
   return { update };
