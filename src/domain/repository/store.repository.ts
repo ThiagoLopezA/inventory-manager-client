@@ -1,4 +1,4 @@
-import { ServiceResponse, Store } from "../models";
+import { Item, ServiceResponse, Store } from "../models";
 
 export interface StoreService {
   create(store: Store): Promise<ServiceResponse>;
@@ -14,4 +14,11 @@ export interface StoreStorageService {
   updateStore(store: Store): Promise<void>;
   getStores(): Promise<Store[]>;
   setStores(stores: Store[]): Promise<void>;
+  refreshStore(): Promise<void>;
+}
+
+export interface InventoryService {
+  addItem(store: Store, item: Item): Promise<ServiceResponse>;
+  removeItem(store: Store, item: Item): Promise<ServiceResponse>;
+  getItems(store: Store): Promise<ServiceResponse>;
 }
