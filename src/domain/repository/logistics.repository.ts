@@ -16,7 +16,7 @@ export interface LogisticsStorageService {
   addTicket(ticket: Ticket): Promise<void>;
   removeTicket(id: number): Promise<void>;
   updateTicket(ticket: Ticket): Promise<void>;
-  getTickets(): Promise<void>;
+  getTickets(): Promise<Ticket[]>;
   setWithdraws(withdraws: Withdraw[]): Promise<void>;
   addWithdraw(withdraw: Withdraw): Promise<void>;
   removeWithdraw(id: number): Promise<void>;

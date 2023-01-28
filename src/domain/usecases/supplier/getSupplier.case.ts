@@ -3,7 +3,7 @@ import { NotificationService, SuppliersService } from "../../repository";
 let service: SuppliersService;
 let notification: NotificationService;
 
-export function useGetSupplier() {
+export function useGetOneSupplier() {
   async function getOne(id: number) {
     const { error, message, data } = await service.findOne(id);
     if (error) {

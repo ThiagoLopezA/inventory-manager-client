@@ -1,21 +1,21 @@
 import {
+  ElementService,
+  ElementStorageService,
   NotificationService,
-  SuppliersService,
-  SuppliersStorageService,
 } from "../../repository";
 
-let service: SuppliersService;
+let service: ElementService;
+let storage: ElementStorageService;
 let notification: NotificationService;
-let storage: SuppliersStorageService;
 
-export function useGetAllSuppliers() {
+export function useGetElements() {
   async function getAll() {
-    const { error, data, message } = await service.findAll();
+    const { error, message, data } = await service.getAll();
     if (error) {
       notification.error(message);
     } else {
+      await storage.setElements(data);
       notification.success(message);
-      await storage.setSuppliers(data);
     }
   }
 
