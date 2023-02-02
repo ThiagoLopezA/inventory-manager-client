@@ -1,23 +1,15 @@
-import { NotificationService } from "../../repository";
-import {
-  LogisticsService,
-  LogisticsStorageService,
-} from "../../repository/logistics.repository";
+import { UseCaseResponse } from "../../models";
+import { LogisticsService } from "../../repository";
 
 let service: LogisticsService;
-let storage: LogisticsStorageService;
-let notification: NotificationService;
 
-export function useGetWithdraw() {
-  async function getOne(id: number) {
+export async function getWithdrawUseCase(id: number): Promise<UseCaseResponse> {
+  try {
     const { error, message, data } = await service.getWithdraw(id);
-    if (error) {
-      notification.error(message);
-    } else {
-      notification.success(message);
-    }
-    return data;
+    if (error) throw new Error(message);
+    return { success: true, data };
+  } catch (error: any) {
+    console.log(error);
+    return { success: false, error: error.messsage };
   }
-
-  return { getOne };
 }

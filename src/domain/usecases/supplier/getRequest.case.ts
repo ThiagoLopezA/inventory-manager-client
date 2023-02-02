@@ -1,18 +1,15 @@
-import { NotificationService, RequestsService } from "../../repository";
+import { UseCaseResponse } from "../../models";
+import { RequestsService } from "../../repository";
 
 let service: RequestsService;
-let notification: NotificationService;
 
-export function useGetSupplier() {
-  async function getOne(id: number) {
+export async function getSupplierUseCase(id: number): Promise<UseCaseResponse> {
+  try {
     const { error, message, data } = await service.findOne(id);
-    if (error) {
-      notification.error(message);
-    } else {
-      notification.success(message);
-    }
-    return data;
+    if (error) throw new Error(message);
+    return { success: true, data };
+  } catch (error: any) {
+    console.log(error);
+    return { success: false, error: error.message };
   }
-
-  return { getOne };
 }

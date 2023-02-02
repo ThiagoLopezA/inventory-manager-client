@@ -1,23 +1,17 @@
-import {
-  NotificationService,
-  SuppliersService,
-  SuppliersStorageService,
-} from "../../repository";
+import { UseCaseResponse } from "../../models";
+import { SuppliersService, SuppliersStorage } from "../../repository";
 
 let service: SuppliersService;
-let notification: NotificationService;
-let storage: SuppliersStorageService;
+let storage: SuppliersStorage;
 
-export function useGetAllSuppliers() {
-  async function getAll() {
+export async function getAllSuppliersUseCase(): Promise<UseCaseResponse> {
+  try {
     const { error, data, message } = await service.findAll();
-    if (error) {
-      notification.error(message);
-    } else {
-      notification.success(message);
-      await storage.setSuppliers(data);
-    }
+    if (error) throw new Error(message);
+    await storage.setSuppliers(data);
+    return { success: true, data };
+  } catch (error: any) {
+    console.log(error);
+    return { success: false, error: error.message };
   }
-
-  return { getAll };
 }

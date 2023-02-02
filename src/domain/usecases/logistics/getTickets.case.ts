@@ -1,23 +1,17 @@
-import { NotificationService } from "../../repository";
-import {
-  LogisticsService,
-  LogisticsStorageService,
-} from "../../repository/logistics.repository";
+import { UseCaseResponse } from "../../models";
+import { LogisticsService, LogisticsStorage } from "../../repository";
 
 let service: LogisticsService;
-let storage: LogisticsStorageService;
-let notification: NotificationService;
+let storage: LogisticsStorage;
 
-export function useGetTickets() {
-  async function getAll() {
+export async function getTicketsUseCase(): Promise<UseCaseResponse> {
+  try {
     const { error, data, message } = await service.getTickets();
-    if (error) {
-      notification.error(message);
-    } else {
-      await storage.setTickets(data);
-      notification.success(message);
-    }
+    if (error) throw new Error(message);
+    await storage.setTickets(data);
+    return { success: true, data };
+  } catch (error: any) {
+    console.log(error);
+    return { success: false, error: error.message };
   }
-
-  return { getAll };
 }

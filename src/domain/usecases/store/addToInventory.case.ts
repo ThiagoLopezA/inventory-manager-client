@@ -1,24 +1,22 @@
-import { Item, Store } from "../../models";
-import {
-  InventoryService,
-  NotificationService,
-  StoreStorageService,
-} from "../../repository";
+import { Item, Store, UseCaseResponse } from "../../models";
+import { StoreService, StoreStorage } from "../../repository";
 
-let service: InventoryService;
-let notification: NotificationService;
-let storage: StoreStorageService;
+let service: StoreService;
+let storage: StoreStorage;
 
-export function useAddToInventory() {
-  async function addItem(store: Store, item: Item) {
-    const { error, message } = await service.addItem(store, item);
-    if (error) {
-      notification.error(message);
-    } else {
-      await storage.refreshStore();
-      notification.success(message);
-    }
+export async function addToInventoryUseCase(
+  store: Store,
+  item: Item
+): Promise<UseCaseResponse> {
+  try {
+    const response = await service.addItem(store, item);
+    if (response.error) throw new Error(response.message);
+    const updated = await service.getItems(store);
+    if (updated.error) throw new Error(updated.message);
+    await storage.updateInventory(updated.data);
+    return { success: true, data: updated.data };
+  } catch (error: any) {
+    console.log(error);
+    return { success: error, error: error.message };
   }
-
-  return { addItem };
 }

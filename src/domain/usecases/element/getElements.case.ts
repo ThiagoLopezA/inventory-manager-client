@@ -1,23 +1,17 @@
-import {
-  ElementService,
-  ElementStorageService,
-  NotificationService,
-} from "../../repository";
+import { UseCaseResponse } from "../../models";
+import { ElementService, ElementStorage } from "../../repository";
 
 let service: ElementService;
-let storage: ElementStorageService;
-let notification: NotificationService;
+let storage: ElementStorage;
 
-export function useGetElements() {
-  async function getAll() {
+export async function getElementsUseCase(): Promise<UseCaseResponse> {
+  try {
     const { error, message, data } = await service.getAll();
-    if (error) {
-      notification.error(message);
-    } else {
-      await storage.setElements(data);
-      notification.success(message);
-    }
+    if (error) throw new Error(message);
+    await storage.setElements(data);
+    return { success: true, data };
+  } catch (error: any) {
+    console.log(error);
+    return { success: false, error: error.message };
   }
-
-  return { getAll };
 }

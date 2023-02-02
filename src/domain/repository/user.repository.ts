@@ -1,21 +1,24 @@
 import { ServiceResponse, Email, User } from "../models";
 
-export interface UsersStorageService {
+export interface UsersStorage {
+  users: User[] | undefined;
+
   addUser(user: User): Promise<void>;
   removeUser(id: number): Promise<void>;
   updateUser(user: User): Promise<void>;
-  getUsers(): Promise<User[]>;
   setUsers(users: User[]): void;
 }
 
-export interface UserStorageService {
-  user(): Promise<User>;
+export interface UserStorage {
+  user: User;
+
   setUser(user: User): Promise<User>;
+  updateUser(user: User): Promise<User>;
   removeUser(): void;
 }
 
 export interface AuthenticationService {
-  login(email: Email, password: string): Promise<User>;
+  login(email: Email, password: string): Promise<ServiceResponse>;
 }
 
 export interface UsersService {

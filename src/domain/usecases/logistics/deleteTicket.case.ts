@@ -1,23 +1,19 @@
-import { NotificationService } from "../../repository";
-import {
-  LogisticsService,
-  LogisticsStorageService,
-} from "../../repository/logistics.repository";
+import { UseCaseResponse } from "../../models";
+import { LogisticsService, LogisticsStorage } from "../../repository";
 
 let service: LogisticsService;
-let storage: LogisticsStorageService;
-let notification: NotificationService;
+let storage: LogisticsStorage;
 
-export function useDestroyTicket() {
-  async function destroy(id: number) {
-    const { error, message } = await service.deleteTicket(id);
-    if (error) {
-      notification.error(message);
-    } else {
-      await storage.removeTicket(id);
-      notification.success(message);
-    }
+export async function destroyTicketUseCase(
+  id: number
+): Promise<UseCaseResponse> {
+  try {
+    const { error, message, data } = await service.deleteTicket(id);
+    if (error) throw new Error(message);
+    await storage.removeTicket(id);
+    return { success: true, data };
+  } catch (error: any) {
+    console.log(error);
+    return { success: false, error: error.message };
   }
-
-  return { destroy };
 }

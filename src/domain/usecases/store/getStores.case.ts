@@ -1,23 +1,17 @@
-import {
-  NotificationService,
-  StoreService,
-  StoreStorageService,
-} from "../../repository";
+import { UseCaseResponse } from "../../models";
+import { StoreService, StoresStorage } from "../../repository";
 
 let service: StoreService;
-let notification: NotificationService;
-let storage: StoreStorageService;
+let storage: StoresStorage;
 
-export function useGetStores() {
-  async function getAll() {
+export async function getStoresUseCase(): Promise<UseCaseResponse> {
+  try {
     const { error, data, message } = await service.findAll();
-    if (error) {
-      notification.error(message);
-    } else {
-      notification.success(message);
-      await storage.setStores(data);
-    }
+    if (error) throw new Error(message);
+    await storage.setStores(data);
+    return { success: true, data };
+  } catch (error: any) {
+    console.log(error);
+    return { success: false, error: error.message };
   }
-
-  return { getAll };
 }

@@ -1,24 +1,17 @@
-import { User } from "../../models";
-import {
-  NotificationService,
-  UsersService,
-  UsersStorageService,
-} from "../../repository";
+import { UseCaseResponse, User } from "../../models";
+import { UsersService, UsersStorage } from "../../repository";
 
 let service: UsersService;
-let notification: NotificationService;
-let storage: UsersStorageService;
+let storage: UsersStorage;
 
-export function useUpdateUser() {
-  async function update(user: User) {
-    const { error, message } = await service.update(user);
-    if (error) {
-      notification.error(message);
-    } else {
-      await storage.updateUser(user);
-      notification.success(message);
-    }
+export async function updateUserUseCase(user: User): Promise<UseCaseResponse> {
+  try {
+    const { error, message, data } = await service.update(user);
+    if (error) throw new Error(message);
+    await storage.updateUser(data);
+    return { success: true, data };
+  } catch (error: any) {
+    console.log(error);
+    return { success: false, error: error.message };
   }
-
-  return { update };
 }

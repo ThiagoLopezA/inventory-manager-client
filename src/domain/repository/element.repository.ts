@@ -8,9 +8,10 @@ export interface ElementService {
   getOne(id: number): Promise<ServiceResponse>;
 }
 
-export interface ElementStorageService {
+export interface ElementStorage {
+  elements: Element[] | undefined;
+
   setElements(elements: Element[]): Promise<void>;
-  getElements(): Promise<Element[]>;
   updateElement(element: Element): Promise<void>;
   removeElement(id: number): Promise<void>;
   addElement(element: Element): Promise<void>;

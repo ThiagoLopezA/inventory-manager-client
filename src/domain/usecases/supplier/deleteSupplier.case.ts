@@ -1,23 +1,16 @@
-import {
-  NotificationService,
-  SuppliersService,
-  SuppliersStorageService,
-} from "../../repository";
+import { SuppliersService, SuppliersStorage } from "../../repository";
 
 let service: SuppliersService;
-let notification: NotificationService;
-let storage: SuppliersStorageService;
+let storage: SuppliersStorage;
 
-export function useDestroySupplier() {
-  async function destroy(id: number) {
-    const { error, message } = await service.delete(id);
-    if (error) {
-      notification.error(message);
-    } else {
-      await storage.removeSupplier(id);
-      notification.success(message);
-    }
+export async function destroySupplierUseCase(id: number) {
+  try {
+    const { error, message, data } = await service.delete(id);
+    if (error) throw new Error(message);
+    await storage.removeSupplier(id);
+    return { success: true, data };
+  } catch (error: any) {
+    console.log(error);
+    return { success: false, error: error.message };
   }
-
-  return { destroy };
 }

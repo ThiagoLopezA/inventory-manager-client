@@ -1,23 +1,17 @@
-import { NotificationService } from "../../repository";
-import {
-  LogisticsService,
-  LogisticsStorageService,
-} from "../../repository/logistics.repository";
+import { UseCaseResponse } from "../../models";
+import { LogisticsService, LogisticsStorage } from "../../repository";
 
 let service: LogisticsService;
-let storage: LogisticsStorageService;
-let notification: NotificationService;
+let storage: LogisticsStorage;
 
-export function useGetWithdraws() {
-  async function getAll() {
+export async function useGetWithdraws(): Promise<UseCaseResponse> {
+  try {
     const { error, data, message } = await service.getWithdraws();
-    if (error) {
-      notification.error(message);
-    } else {
-      await storage.setWithdraws(data);
-      notification.success(message);
-    }
+    if (error) throw new Error(message);
+    await storage.setWithdraws(data);
+    return { success: true, data };
+  } catch (error: any) {
+    console.log(error);
+    return { success: false, error: error.message };
   }
-
-  return { getAll };
 }

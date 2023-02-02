@@ -1,24 +1,19 @@
-import { Request } from "../../models";
-import {
-  NotificationService,
-  RequestsService,
-  RequestsStorageService,
-} from "../../repository";
+import { Request, UseCaseResponse } from "../../models";
+import { RequestsService, RequestsStorage } from "../../repository";
 
 let service: RequestsService;
-let storage: RequestsStorageService;
-let notification: NotificationService;
+let storage: RequestsStorage;
 
-export function useCreateRequest() {
-  async function create(request: Request) {
-    const { error, message } = await service.create(request);
-    if (error) {
-      notification.error(message);
-    } else {
-      await storage.addRequest(request);
-      notification.success(message);
-    }
+export async function createRequestUseCase(
+  request: Request
+): Promise<UseCaseResponse> {
+  try {
+    const { error, message, data } = await service.create(request);
+    if (error) throw new Error(message);
+    await storage.addRequest(data);
+    return { success: true, data };
+  } catch (error: any) {
+    console.log(error);
+    return { success: false, error: error.message };
   }
-
-  return { create };
 }

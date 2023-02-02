@@ -1,24 +1,22 @@
-import { Ticket } from "../../models";
-import { NotificationService } from "../../repository";
+import { Ticket, UseCaseResponse } from "../../models";
 import {
   LogisticsService,
-  LogisticsStorageService,
+  LogisticsStorage,
 } from "../../repository/logistics.repository";
 
 let service: LogisticsService;
-let storage: LogisticsStorageService;
-let notification: NotificationService;
+let storage: LogisticsStorage;
 
-export function useCreateTicket() {
-  async function create(ticket: Ticket) {
-    const { error, message } = await service.createTicket(ticket);
-    if (error) {
-      notification.error(message);
-    } else {
-      await storage.addTicket(ticket);
-      notification.success(message);
-    }
+export async function createTicketUseCase(
+  ticket: Ticket
+): Promise<UseCaseResponse> {
+  try {
+    const { error, message, data } = await service.createTicket(ticket);
+    if (error) throw new Error(message);
+    await storage.addTicket(data);
+    return { success: true, data };
+  } catch (error: any) {
+    console.log(error);
+    return { success: false, error: error.message };
   }
-
-  return { create };
 }

@@ -1,24 +1,19 @@
-import { Supplier } from "../../models";
-import {
-  NotificationService,
-  SuppliersService,
-  SuppliersStorageService,
-} from "../../repository";
+import { Supplier, UseCaseResponse } from "../../models";
+import { SuppliersService, SuppliersStorage } from "../../repository";
 
 let service: SuppliersService;
-let notification: NotificationService;
-let storage: SuppliersStorageService;
+let storage: SuppliersStorage;
 
-export function useCreateSupplier() {
-  async function create(supplier: Supplier) {
-    const { error, message } = await service.create(supplier);
-    if (error) {
-      notification.error(message);
-    } else {
-      await storage.addSupplier(supplier);
-      notification.success(message);
-    }
+export async function createSupplierUseCase(
+  supplier: Supplier
+): Promise<UseCaseResponse> {
+  try {
+    const { error, message, data } = await service.create(supplier);
+    if (error) throw new Error(message);
+    await storage.addSupplier(data);
+    return { success: true, data };
+  } catch (error: any) {
+    console.log(error);
+    return { success: false, error: error.message };
   }
-
-  return { create };
 }

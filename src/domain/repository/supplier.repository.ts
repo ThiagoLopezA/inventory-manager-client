@@ -1,10 +1,11 @@
 import { Request, ServiceResponse, Supplier } from "../models";
 
-export interface SuppliersStorageService {
+export interface SuppliersStorage {
+  suppliers: Supplier[] | undefined;
+
   addSupplier(supplier: Supplier): Promise<void>;
   removeSupplier(id: number): Promise<void>;
   updateSupplier(supplier: Supplier): Promise<void>;
-  getSuppliers(): Promise<Supplier[]>;
   setSuppliers(suppliers: Supplier[]): Promise<void>;
 }
 
@@ -24,10 +25,11 @@ export interface RequestsService {
   findOne(id: number): Promise<ServiceResponse>;
 }
 
-export interface RequestsStorageService {
+export interface RequestsStorage {
+  requests: Request[] | undefined;
+
   addRequest(request: Request): Promise<void>;
   removeRequest(id: number): Promise<void>;
   updateRequest(request: Request): Promise<void>;
-  getRequests(options?: object): Promise<Request[]>;
   setRequests(requests: Request[]): Promise<void>;
 }

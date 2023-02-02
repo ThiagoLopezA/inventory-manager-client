@@ -11,12 +11,14 @@ export interface LogisticsService {
   getWithdraw(id: number): Promise<ServiceResponse>;
 }
 
-export interface LogisticsStorageService {
+export interface LogisticsStorage {
+  tickets: Ticket[] | undefined;
+  withdraws: Withdraw[] | undefined;
+
   setTickets(tickets: Ticket[]): Promise<void>;
   addTicket(ticket: Ticket): Promise<void>;
   removeTicket(id: number): Promise<void>;
   updateTicket(ticket: Ticket): Promise<void>;
-  getTickets(): Promise<Ticket[]>;
   setWithdraws(withdraws: Withdraw[]): Promise<void>;
   addWithdraw(withdraw: Withdraw): Promise<void>;
   removeWithdraw(id: number): Promise<void>;

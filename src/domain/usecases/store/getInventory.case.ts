@@ -1,24 +1,19 @@
-import { Store } from "../../models";
-import {
-  InventoryService,
-  NotificationService,
-  StoreStorageService,
-} from "../../repository";
+import { Store, UseCaseResponse } from "../../models";
+import { StoreService, StoreStorage } from "../../repository";
 
-let service: InventoryService;
-let notification: NotificationService;
-let storage: StoreStorageService;
+let service: StoreService;
+let storage: StoreStorage;
 
-export function useGetInventory() {
-  async function getInventory(store: Store) {
+export async function getInventoryUseCase(
+  store: Store
+): Promise<UseCaseResponse> {
+  try {
     const { error, data, message } = await service.getItems(store);
-    if (error) {
-      notification.error(message);
-    } else {
-      await storage.refreshStore();
-      notification.success(message);
-    }
+    if (error) throw new Error(message);
+    await storage.updateInventory(data);
+    return { success: true, data };
+  } catch (error: any) {
+    console.log(error);
+    return { success: false, error: error.message };
   }
-
-  return { getInventory };
 }

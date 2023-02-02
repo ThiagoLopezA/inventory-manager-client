@@ -15,3 +15,9 @@ export interface ServiceResponse {
   error: boolean;
   data?: any;
 }
+
+export interface UseCaseResponse {
+  success: boolean;
+  data?: any;
+  error?: string;
+}

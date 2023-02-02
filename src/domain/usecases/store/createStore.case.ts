@@ -1,24 +1,19 @@
-import { Store } from "../../models";
-import {
-  NotificationService,
-  StoreService,
-  StoreStorageService,
-} from "../../repository";
+import { Store, UseCaseResponse } from "../../models";
+import { StoreService, StoresStorage } from "../../repository";
 
 let service: StoreService;
-let storage: StoreStorageService;
-let notification: NotificationService;
+let storage: StoresStorage;
 
-export function useCreateStore() {
-  async function create(store: Store) {
-    const { error, message } = await service.create(store);
-    if (error) {
-      notification.error(message);
-    } else {
-      await storage.addStore(store);
-      notification.success(message);
-    }
+export async function createStoreUseCase(
+  store: Store
+): Promise<UseCaseResponse> {
+  try {
+    const { error, message, data } = await service.create(store);
+    if (error) throw new Error(message);
+    await storage.addStore(data);
+    return { success: true, data };
+  } catch (error: any) {
+    console.log(error);
+    return { success: false, error: error.message };
   }
-
-  return { create };
 }

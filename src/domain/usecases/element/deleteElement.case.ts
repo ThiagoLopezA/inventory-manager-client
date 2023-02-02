@@ -1,23 +1,19 @@
-import {
-  ElementService,
-  ElementStorageService,
-  NotificationService,
-} from "../../repository";
+import { UseCaseResponse } from "../../models";
+import { ElementService, ElementStorage } from "../../repository";
 
 let service: ElementService;
-let storage: ElementStorageService;
-let notification: NotificationService;
+let storage: ElementStorage;
 
-export function useDestroyElement() {
-  async function destroy(id: number) {
-    const { error, message } = await service.delete(id);
-    if (error) {
-      notification.error(message);
-    } else {
-      storage.removeElement(id);
-      notification.success(message);
-    }
+export async function destroyElementUseCase(
+  id: number
+): Promise<UseCaseResponse> {
+  try {
+    const { error, message, data } = await service.delete(id);
+    if (error) throw new Error(message);
+    storage.removeElement(id);
+    return { success: true, data };
+  } catch (error: any) {
+    console.log(error);
+    return { success: false, error: error.message };
   }
-
-  return { destroy };
 }

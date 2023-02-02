@@ -1,23 +1,19 @@
-import {
-  NotificationService,
-  RequestsService,
-  RequestsStorageService,
-} from "../../repository";
+import { UseCaseResponse } from "../../models";
+import { RequestsService, RequestsStorage } from "../../repository";
 
 let service: RequestsService;
-let notification: NotificationService;
-let storage: RequestsStorageService;
+let storage: RequestsStorage;
 
-export function useDestroyRequest() {
-  async function destroy(id: number) {
-    const { error, message } = await service.delete(id);
-    if (error) {
-      notification.error(message);
-    } else {
-      await storage.removeRequest(id);
-      notification.success(message);
-    }
+export async function destroyRequestUseCase(
+  id: number
+): Promise<UseCaseResponse> {
+  try {
+    const { error, message, data } = await service.delete(id);
+    if (error) throw new Error(message);
+    await storage.removeRequest(id);
+    return { success: true, data };
+  } catch (error: any) {
+    console.log(error);
+    return { success: false, error: error.message };
   }
-
-  return { destroy };
 }

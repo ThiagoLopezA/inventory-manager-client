@@ -1,24 +1,19 @@
-import { Element } from "../../models";
-import {
-  ElementService,
-  ElementStorageService,
-  NotificationService,
-} from "../../repository";
+import { Element, UseCaseResponse } from "../../models";
+import { ElementService, ElementStorage } from "../../repository";
 
 let service: ElementService;
-let storage: ElementStorageService;
-let notification: NotificationService;
+let storage: ElementStorage;
 
-export function useUpdateElement() {
-  async function update(element: Element) {
-    const { error, message } = await service.update(element);
-    if (error) {
-      notification.error(message);
-    } else {
-      await storage.updateElement(element);
-      notification.success(message);
-    }
+export async function updateElementUseCase(
+  element: Element
+): Promise<UseCaseResponse> {
+  try {
+    const { error, message, data } = await service.update(element);
+    if (error) throw new Error(message);
+    await storage.updateElement(data);
+    return { success: true, data };
+  } catch (error: any) {
+    console.log(error);
+    return { success: false, error: error.message };
   }
-
-  return { update };
 }

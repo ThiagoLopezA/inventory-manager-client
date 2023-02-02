@@ -6,19 +6,24 @@ export interface StoreService {
   update(store: Store): Promise<ServiceResponse>;
   findAll(): Promise<ServiceResponse>;
   findOne(id: number): Promise<ServiceResponse>;
-}
-
-export interface StoreStorageService {
-  addStore(store: Store): Promise<void>;
-  removeStore(id: number): Promise<void>;
-  updateStore(store: Store): Promise<void>;
-  getStores(): Promise<Store[]>;
-  setStores(stores: Store[]): Promise<void>;
-  refreshStore(): Promise<void>;
-}
-
-export interface InventoryService {
   addItem(store: Store, item: Item): Promise<ServiceResponse>;
   removeItem(store: Store, item: Item): Promise<ServiceResponse>;
   getItems(store: Store): Promise<ServiceResponse>;
+}
+
+export interface StoresStorage {
+  stores: Store[] | undefined;
+
+  addStore(store: Store): Promise<void>;
+  removeStore(id: number): Promise<void>;
+  updateStore(store: Store): Promise<void>;
+  setStores(stores: Store[]): Promise<void>;
+}
+
+export interface StoreStorage {
+  store: Store | undefined;
+
+  setStore(store: Store): Promise<Store>;
+  updateInventory(inventory: Item[]): Promise<Item[]>;
+  updateStore(store: Store): Promise<Store>;
 }
